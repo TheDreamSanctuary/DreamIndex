@@ -1,0 +1,43 @@
+name: DreamIndex
+main: com.thedreamsanctuary.dreamindex.DreamIndex
+version: 1.0.2
+commands:
+   dtcreate:
+     description: Adds a new tag to the tag list.
+     aliases: [dtcreate]
+     permission: dreamindex.dtcreate
+     usage:
+
+   dtlist:
+     description: Shows a list of all the tags.
+     aliases: [dtlist]
+     permission: dreamindex.dtlist
+     usage:
+     
+   dtrem:
+     description: Removes a tag from the tag list.
+     aliases: [dtrem]
+     permission:
+     usage:
+
+   duadd:
+     description: Adds a tag to a user
+     aliases: [duadd]
+     permission: dreamindex.durem
+     usage:
+     
+   durem:
+     description: Allows you either search by player or group.
+     aliases: [durem]
+     permission: dreamindex.dtcreate
+     
+   duinfo:
+     description: Allows you either search by player or group.
+     aliases: [duinfo]
+     permission: dreamindex.dtcreate
+        
+   dsearch:
+     description: Allows you either search by player or group.
+     aliases: [dsearch]
+     permission: dreamindex.dtcreate
+ 
