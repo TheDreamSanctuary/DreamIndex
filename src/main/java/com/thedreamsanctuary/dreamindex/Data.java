@@ -18,14 +18,6 @@ public class Data implements Serializable
 	private Multimap<String, String> map = ArrayListMultimap.create();
 	private Map<String, String> pDescript = Maps.newHashMap();
 	
-	public String getGroupName() 
-	{
-		return groupName;
-	}
-	public void setGroupName(String groupName) 
-	{
-		this.groupName = groupName;
-	}
 	public Map<String, String> descriptMap()
 	{
 		return this.pDescript;
