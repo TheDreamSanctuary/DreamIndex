@@ -29,5 +29,6 @@ public class DreamIndex extends JavaPlugin
 		getServer().getPluginCommand("durem").setExecutor(onCom);
 		getServer().getPluginCommand("duinfo").setExecutor(onCom);
 		getServer().getPluginCommand("dsearch").setExecutor(onCom);
+		getServer().getPluginCommand("ddesc").setExecutor(onCom);
 	}
 }

@@ -1,6 +1,6 @@
 name: DreamIndex
 main: com.thedreamsanctuary.dreamindex.DreamIndex
-version: 1.0.2
+version: 1.1.0
 commands:
    dtcreate:
      description: Adds a new tag to the tag list.
@@ -40,4 +40,9 @@ commands:
      description: Allows you either search by player or group.
      aliases: [dsearch]
      permission: dreamindex.dtcreate
+     
+   ddesc:
+     description: Allows you to set your own description
+     aliases: [ddesc]
+     permission: dreamindex.ddisc
  

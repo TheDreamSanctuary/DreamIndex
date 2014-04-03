@@ -57,12 +57,37 @@ public class OnCommand implements CommandExecutor
 			dSearch(args, (Player) sender);
 			
 		}
+		else if (cmd.getName().equalsIgnoreCase("ddesc"))
+		{
+			//dDesc(args, (Player) sender);
+			sender.sendMessage("This command is temporarily disabled");
+		}
 		return false;
 	}
 	/*========================================
 	 * Handler Functions
 	 ========================================*/
 	
+	
+	private boolean dDesc (String args[], Player sender)
+	{
+		ser.data().descriptMap().put("hi", "Hi");
+		
+		
+		if (args.length <= 150)
+          {
+           String msg = "";
+            for (String str : args) msg = (msg + str + " ");
+            
+            System.out.println(sender.getName() + " ::: " + msg);
+           ser.data().descriptMap().put(sender.getName(), msg);
+   
+          }
+          else
+           sender.sendMessage(ChatColor.RED + "Your message is too long it must be under 150 words!");
+		  
+		  return false;
+	}
 	
 	
 	/*==================
@@ -100,12 +125,12 @@ public class OnCommand implements CommandExecutor
 			if (ser.data().getTags().contains(args[0]))
 			{
 				ser.data().getTags().remove(args[0]);
-				sender.sendMessage(ChatColor.GOLD + args[0] + " has been removed from the taglist");
+				sender.sendMessage(ChatColor.GOLD + args[0] + ChatColor.BLUE + " has been removed from the taglist");
 				return true;
 			}
 			else
 			{
-				sender.sendMessage(ChatColor.RED + "That tag name does not exist!");
+				sender.sendMessage(ChatColor.RED + " That tag name does not exist!");
 				return false;
 			}
 		} catch (IndexOutOfBoundsException ioo)
@@ -128,6 +153,7 @@ public class OnCommand implements CommandExecutor
 			return true;
 		} catch (Exception e)
 		{
+			
 			sender.sendMessage(ChatColor.RED + "/dtlist     (Psst not sure how you messed this up");
 		}
 		return false;
@@ -172,7 +198,7 @@ public class OnCommand implements CommandExecutor
 			if (ser.data().getPlayerMap().containsEntry(sender.getName(), args[0]))
 			{
 				ser.data().getPlayerMap().remove(sender.getName(),args[0]);
-				sender.sendMessage(ChatColor.GOLD + args[0] + ChatColor.WHITE + "has been removed from you");
+				sender.sendMessage(ChatColor.GOLD + args[0] + ChatColor.GOLD + ChatColor.BLUE + " has been removed from you");
 			}
 			else
 				sender.sendMessage("You are not wearing that tag!");
@@ -193,13 +219,17 @@ public class OnCommand implements CommandExecutor
 		{
 			if (args.length >= 1)
 			{
-				
-				sender.sendMessage(ChatColor.GOLD + "Members of: " + ChatColor.GOLD + args[0]);
-				for (Entry<String, String> entry : ser.data().getPlayerMap().entries())
+				if (ser.data().getTags().contains(args[0]))
 				{
-					if (entry.getValue().equals(args[0]))
-						sender.sendMessage(ChatColor.LIGHT_PURPLE + entry.getKey());
+					sender.sendMessage(ChatColor.GOLD + "Members of: " + ChatColor.GOLD + args[0]);
+					for (Entry<String, String> entry : ser.data().getPlayerMap().entries())
+					{
+						if (entry.getValue().equals(args[0]))
+							sender.sendMessage(ChatColor.LIGHT_PURPLE + entry.getKey());
+					}
 				}
+				else
+					sender.sendMessage(ChatColor.RED + "That group does not exist!");
 			}
 		} catch (Exception e)
 		{
@@ -231,12 +261,15 @@ public class OnCommand implements CommandExecutor
 				
 				if (ser.data().getPlayerMap().containsKey(player))
 				{
-					
+					//gets the Tags
 					for (Entry<String, String> entry : ser.data().getPlayerMap().entries())
 					{
 						if (entry.getKey().equalsIgnoreCase(player))
 							str += " [" + entry.getValue() +"] ";
 					}
+					
+					//gets the Description
+					//String descript = getDescript(sender);
 				
 					
 					sender.sendMessage(ChatColor.GOLD + "Playername: " + ChatColor.GOLD + args[0]);
@@ -245,7 +278,7 @@ public class OnCommand implements CommandExecutor
 						sender.sendMessage(ChatColor.GOLD + " ");
 					else
 					sender.sendMessage(ChatColor.GOLD + "tags: " + ChatColor.GOLD + str);
-					sender.sendMessage(ChatColor.GOLD  + "description: not implemented yet");
+					sender.sendMessage(ChatColor.GOLD  + "Disabled till further knotice");
 					
 				}
 				else
@@ -259,6 +292,17 @@ public class OnCommand implements CommandExecutor
 	    	sender.sendMessage("/duinfo <playername>");
 	    }
 		return false;
+	}
+	private String getDescript(Player sender)
+	{
+		for (Entry<String, String> entry : ser.data().descriptMap().entrySet())
+		{
+			if (entry.getKey().equals(sender.getName()))
+			{
+				return entry.getValue();
+			}
+		}
+		return null;
 	}
 
 	
