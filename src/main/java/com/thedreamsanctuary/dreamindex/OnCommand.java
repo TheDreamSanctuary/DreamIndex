@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Map.Entry;
 
+import org.apache.commons.lang.StringUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
@@ -84,7 +85,7 @@ public class OnCommand implements CommandExecutor
 			}	
 		} catch (Exception e)
 		{
-			sender.sendMessage(Color.RED + "/dtcreate <tagname>");
+			sender.sendMessage(ChatColor.RED + "/dtcreate <tagname>");
 		}
 		return false;
 	}
@@ -104,7 +105,7 @@ public class OnCommand implements CommandExecutor
 			}
 			else
 			{
-				sender.sendMessage(Color.red + "That tag name does not exist!");
+				sender.sendMessage(ChatColor.RED + "That tag name does not exist!");
 				return false;
 			}
 		} catch (IndexOutOfBoundsException ioo)
@@ -127,7 +128,7 @@ public class OnCommand implements CommandExecutor
 			return true;
 		} catch (Exception e)
 		{
-			sender.sendMessage(Color.red + "/dtlist     (Psst not sure how you messed this up");
+			sender.sendMessage(ChatColor.RED + "/dtlist     (Psst not sure how you messed this up");
 		}
 		return false;
 		
@@ -144,7 +145,7 @@ public class OnCommand implements CommandExecutor
 				if (ser.data().getTags().contains(args[0]))
 				{
 				ser.data().getPlayerMap().put(sender.getName(), args[0]);
-				sender.sendMessage(ChatColor.WHITE + "You have added the " + ChatColor.GOLD + args[0] +ChatColor.WHITE +" to your name!");
+				sender.sendMessage(ChatColor.BLUE + "You have added the " + ChatColor.GOLD + args[0] +ChatColor.BLUE +" to your name!");
 				return true;
 				}
 				else
@@ -197,7 +198,7 @@ public class OnCommand implements CommandExecutor
 				for (Entry<String, String> entry : ser.data().getPlayerMap().entries())
 				{
 					if (entry.getValue().equals(args[0]))
-						sender.sendMessage(Color.lightGray + entry.getKey());
+						sender.sendMessage(ChatColor.LIGHT_PURPLE + entry.getKey());
 				}
 			}
 		} catch (Exception e)
@@ -208,6 +209,9 @@ public class OnCommand implements CommandExecutor
 			
 	}
 	/*==================
+	 * Description
+	 ==================*/
+	/*==================
 	 * DuInfo
 	 ==================*/
 	private boolean duInfo(String[] args, Player sender)
@@ -215,21 +219,31 @@ public class OnCommand implements CommandExecutor
 		try
 	    {
 			//String description[] = null;
-			String str = null;
-			String player;
+			String str = " ";
+			String player =" ";
 			if (args.length >= 1)
 			{
 				player =  Bukkit.getPlayer(args[0]).getName();
+				
+				if (player == null)
+					sender.sendMessage("Player does not exit");
+				
+				
 				if (ser.data().getPlayerMap().containsKey(player))
 				{
 					
 					for (Entry<String, String> entry : ser.data().getPlayerMap().entries())
 					{
-						if (entry.getValue().equals(player))
-							str = str.concat(" " + entry.getValue());
+						if (entry.getKey().equalsIgnoreCase(player))
+							str += " [" + entry.getValue() +"] ";
 					}
+				
 					
 					sender.sendMessage(ChatColor.GOLD + "Playername: " + ChatColor.GOLD + args[0]);
+					
+					if (str.isEmpty())
+						sender.sendMessage(ChatColor.GOLD + " ");
+					else
 					sender.sendMessage(ChatColor.GOLD + "tags: " + ChatColor.GOLD + str);
 					sender.sendMessage(ChatColor.GOLD  + "description: not implemented yet");
 					
@@ -241,17 +255,12 @@ public class OnCommand implements CommandExecutor
 				sender.sendMessage(Color.red + "must input a user!");
 	    } catch (Exception e)
 	    {
+	    	e.printStackTrace();
 	    	sender.sendMessage("/duinfo <playername>");
 	    }
 		return false;
 	}
-	private boolean tContains(String tagName)
-	{
-		if (ser.data().getTags().contains(tagName.toLowerCase()))
-			return true;
-		else
-			return false;
-	}
+
 	
 
 }
