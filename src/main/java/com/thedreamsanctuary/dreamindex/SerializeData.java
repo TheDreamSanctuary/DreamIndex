@@ -65,7 +65,6 @@ public class SerializeData
 	{
 		try
 		{
-			System.out.println("data"  + pluginLoc + File.separator + dataFile + ".sgf");
 			FileInputStream inputStream = new FileInputStream(pluginLoc + File.separator + dataFile + ".sgf");
 	        ObjectInputStream in = new ObjectInputStream(inputStream);
 	        this.d = (Data) in.readObject();
@@ -84,25 +83,5 @@ public class SerializeData
 			return false;
 		}		
 		return false;
-	}
-	public boolean remGroup(String str)
-	{
-		File file = new File(pluginLoc + File.separator + str + ".sgf");
-		file.delete();
-		return false;
-		
-	}
-	public File[] getGroups(Player sender)
-	{
-		File folder = new File(pluginLoc.toString());
-		File files[] = folder.listFiles();
-		files = folder.listFiles();
-		
-		sender.sendMessage("List of groups:");
-		for (File f : files)
-		{
-			sender.sendMessage(Color.BLUE + f.getName());
-		}
-		return files;	
 	}
 }
