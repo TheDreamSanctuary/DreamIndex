@@ -6,6 +6,7 @@ import java.util.Collection;
 import java.util.Map.Entry;
 
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -68,47 +69,67 @@ public class OnCommand implements CommandExecutor
 	 ==================*/
 	private boolean dtCreate(String[] args,Player sender)
 	{
-		System.out.println("thrown");
-		if (!tContains(args[0]))
+		try
 		{
-			ser.data().getTags().add(args[0]);
-			sender.sendMessage(args[0] + "has been added to the taglist");
-			return true;
+			System.out.println("thrown");
+			if (!ser.data().getTags().contains(args[0]))
+			{
+				ser.data().getTags().add(args[0]);
+				sender.sendMessage(ChatColor.GOLD + args[0] + ChatColor.BLUE + " has been added to the taglist");
+				return true;
+			}
+			else
+			{
+				sender.sendMessage(ChatColor.RED + "There is already a group under this name");
+			}	
+		} catch (Exception e)
+		{
+			sender.sendMessage(Color.RED + "/dtcreate <tagname>");
 		}
-		else
-		{
-			sender.sendMessage("There is already a group under this name");
-			return false;
-		}			
+		return false;
 	}
 	/*==================
 	 * DTREM
 	 ==================*/
 	private boolean dtRem(String[] args, Player sender)
 	{
-		System.out.println("thrown");
-		if (tContains(args[0]))
+		try
 		{
-			ser.data().getTags().remove(args[0]);
-			sender.sendMessage(args[0] + "has been removed from the taglist");
-			return true;
-		}
-		else
+			System.out.println("thrown");
+			if (ser.data().getTags().contains(args[0]))
+			{
+				ser.data().getTags().remove(args[0]);
+				sender.sendMessage(ChatColor.GOLD + args[0] + " has been removed from the taglist");
+				return true;
+			}
+			else
+			{
+				sender.sendMessage(Color.red + "That tag name does not exist!");
+				return false;
+			}
+		} catch (IndexOutOfBoundsException ioo)
 		{
-			sender.sendMessage(Color.red + "That tag name does not exist!");
-			return false;
+			sender.sendMessage("You must submit a tag to remove");
 		}
+		return false;
 	}
 	/*==================
 	 * lists all the tags
 	 ==================*/
 	private boolean dtList(String[] args, Player sender)
 	{
-		sender.sendMessage("List of tags");
-		
-		for (String tags : ser.data().getTags())
-			sender.sendMessage(tags);
-		return true;
+		try
+		{
+			sender.sendMessage("List of tags");
+			
+			for (String tags : ser.data().getTags())
+				sender.sendMessage(tags);
+			return true;
+		} catch (Exception e)
+		{
+			sender.sendMessage(Color.red + "/dtlist     (Psst not sure how you messed this up");
+		}
+		return false;
 		
 	}
 	/*==================
@@ -116,21 +137,26 @@ public class OnCommand implements CommandExecutor
 	 ==================*/
 	private boolean duAdd(String[] args, Player sender)
 	{
-		System.out.println("thrown");
-		if (!ser.data().getPlayerMap().containsEntry(sender.getName(), args[0]))
+		try
 		{
-			if (ser.data().getTags().contains(args[0]))
+			if (!ser.data().getPlayerMap().containsEntry(sender.getName(), args[0]))
 			{
-			ser.data().getPlayerMap().put(sender.getName(), args[0]);
-			sender.sendMessage("You have added the " + args[0] + " to your name!");
-			return true;
+				if (ser.data().getTags().contains(args[0]))
+				{
+				ser.data().getPlayerMap().put(sender.getName(), args[0]);
+				sender.sendMessage(ChatColor.WHITE + "You have added the " + ChatColor.GOLD + args[0] +ChatColor.WHITE +" to your name!");
+				return true;
+				}
+				else
+					sender.sendMessage(ChatColor.RED + "there is no such tag, use /dtcreate to make a new tag");
 			}
 			else
-				sender.sendMessage(Color.red + "there is no such tag, use /dtcreate to make a new tag");
-		}
-		else
+			{
+				sender.sendMessage(ChatColor.RED + "You are already wearing that tag");
+			}
+		} catch (Exception e)
 		{
-			sender.sendMessage(Color.red + "You are already wearing that tag");
+			sender.sendMessage(ChatColor.RED  + "/duAdd <tagname>");
 		}
 		
 	return false;	
@@ -140,13 +166,20 @@ public class OnCommand implements CommandExecutor
 	 ==================*/
 	private boolean duRem(String[] args, Player sender)
 	{
-		if (ser.data().getPlayerMap().containsEntry(sender.getName(), args[0]))
+		try
 		{
-			ser.data().getPlayerMap().remove(sender.getName(),args[0]);
-			sender.sendMessage(args[0] + "has been removed from you");
+			if (ser.data().getPlayerMap().containsEntry(sender.getName(), args[0]))
+			{
+				ser.data().getPlayerMap().remove(sender.getName(),args[0]);
+				sender.sendMessage(ChatColor.GOLD + args[0] + ChatColor.WHITE + "has been removed from you");
+			}
+			else
+				sender.sendMessage("You are not wearing that tag!");
+			return false;
+		} catch (Exception e)
+		{
+			sender.sendMessage(ChatColor.RED + "/durem <tagname>");
 		}
-		else
-			sender.sendMessage("You are not wearing that tag!");
 		return false;
 		
 	}
@@ -155,48 +188,61 @@ public class OnCommand implements CommandExecutor
 	 ==================*/
 	private boolean dSearch(String[] args, Player sender)
 	{
-		if (args.length >= 1)
+		try
 		{
-			
-			sender.sendMessage(Color.orange + "Members of: " + Color.blue + args[0]);
-			for (Entry<String, String> entry : ser.data().getPlayerMap().entries())
+			if (args.length >= 1)
 			{
-				if (entry.getValue().equals(args[0]))
-					sender.sendMessage(Color.lightGray + entry.getKey());
+				
+				sender.sendMessage(ChatColor.GOLD + "Members of: " + ChatColor.GOLD + args[0]);
+				for (Entry<String, String> entry : ser.data().getPlayerMap().entries())
+				{
+					if (entry.getValue().equals(args[0]))
+						sender.sendMessage(Color.lightGray + entry.getKey());
+				}
 			}
-		}			
-		return false;
+		} catch (Exception e)
+		{
+			sender.sendMessage(ChatColor.RED + "</dsearch <groupname>");
+		}
+			return false;
+			
 	}
 	/*==================
 	 * DuInfo
 	 ==================*/
 	private boolean duInfo(String[] args, Player sender)
 	{
-		//String description[] = null;
-		String str = null;
-		String player;
-		if (args.length >= 1)
-		{
-			player =  Bukkit.getPlayer(args[0]).getName();
-			if (ser.data().getPlayerMap().containsKey(player))
+		try
+	    {
+			//String description[] = null;
+			String str = null;
+			String player;
+			if (args.length >= 1)
 			{
-				
-				for (Entry<String, String> entry : ser.data().getPlayerMap().entries())
+				player =  Bukkit.getPlayer(args[0]).getName();
+				if (ser.data().getPlayerMap().containsKey(player))
 				{
-					if (entry.getValue().equals(player))
-						str = str.concat(" " + entry.getValue());
+					
+					for (Entry<String, String> entry : ser.data().getPlayerMap().entries())
+					{
+						if (entry.getValue().equals(player))
+							str = str.concat(" " + entry.getValue());
+					}
+					
+					sender.sendMessage(ChatColor.GOLD + "Playername: " + ChatColor.GOLD + args[0]);
+					sender.sendMessage(ChatColor.GOLD + "tags: " + ChatColor.GOLD + str);
+					sender.sendMessage(ChatColor.GOLD  + "description: not implemented yet");
+					
 				}
-				
-				sender.sendMessage(Color.orange + "Playername: " + Color.blue + args[0]);
-				sender.sendMessage(Color.orange + "tags: " + Color.blue + str);
-				sender.sendMessage(Color.orange + "description: not implemented yet");
-				
+				else
+					sender.sendMessage("That user is not currently listed!");
 			}
 			else
-				sender.sendMessage("That user is not currently listed!");
-		}
-		else
-			sender.sendMessage(Color.red + "must input a user!");
+				sender.sendMessage(Color.red + "must input a user!");
+	    } catch (Exception e)
+	    {
+	    	sender.sendMessage("/duinfo <playername>");
+	    }
 		return false;
 	}
 	private boolean tContains(String tagName)
